@@ -102,3 +102,12 @@ stages:
               targetPath: '$(Pipeline.Workspace)'
               artifact: 'az-artifact-9'
               publishLocation: 'pipeline'
+  - stage: Deploy
+    displayName: Deploy
+    jobs:
+      - job: "j4"
+        steps:
+          - task: ServiceNow-DevOps-Server-Change-Acceleration@1
+            inputs:
+              connectedServiceName: 'empdsingh2-TestReleasePipeline-ServiceNow DevOps Service Connection'
+              UpstreamJob: 'j3'
