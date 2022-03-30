@@ -1,3 +1,53 @@
+stages:
+  - stage: Build
+    displayName: Build
+    jobs:
+      - job: "j1"
+        steps:
+          - task: Bash@3
+            inputs:
+              targetType: "inline"
+              script: |
+                # Write your commands here
+
+                echo 'Hello world'
+
+
+  - stage: ArtifactAndPackage
+    jobs:
+          - job: 'j2'
+            steps:
+            - task: ServiceNow-DevOps-Agent-Artifact-Registration@1
+              inputs:
+                connectedServiceName: 'empdsingh2-TestReleasePipeline-ServiceNow DevOps Service Connection'
+                artifactsPayload: |
+                  {
+                  "artifacts": [
+                  {
+                  "name": "Builddrop-1",
+                  "version": "1.$(Build.BuildId)",
+                  "semanticVersion": "1.$(Build.BuildId).0",
+                  "repositoryName": "testpipeline"
+                  }
+                  ]
+                  }
+          
+            - task: ServiceNow-DevOps-Agent-Package-Registration@1
+              inputs:
+                connectedServiceName: 'empdsingh2-TestReleasePipeline-ServiceNow DevOps Service Connection'
+                packageName: 'Package1'
+                artifactsPayload: |
+                  {
+                  "artifacts": [
+                  {
+                  "name": "Builddrop-1",
+                  "version": "1.$(Build.BuildId)",
+                  "semanticVersion": "1.$(Build.BuildId).0",
+                  "repositoryName": "testpipeline"
+                  }
+                  ]
+                  }
+  - stage: Test
 schedules:
 - cron: "0 3 * * Mon"
   displayName: Weekly build
