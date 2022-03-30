@@ -91,3 +91,14 @@ stages:
           command: test
           projects: '**/*Tests/*Tests.csproj'
           arguments: '--no-build --filter "$(targetTestsFilter)"'
+
+  - stage: publish
+    displayName: publish
+    jobs:
+      - job: "j3"
+        steps:
+          - task: PublishPipelineArtifact@1
+            inputs:
+              targetPath: '$(Pipeline.Workspace)'
+              artifact: 'az-artifact-9'
+              publishLocation: 'pipeline'
