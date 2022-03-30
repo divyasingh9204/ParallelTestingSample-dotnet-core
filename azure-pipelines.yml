@@ -104,6 +104,7 @@ stages:
               publishLocation: 'pipeline'
   - stage: Deploy
     displayName: Deploy
+    pool: server
     jobs:
       - job: "j4"
         steps:
